@@ -55,7 +55,10 @@ public class FtcOpModeRegister implements OpModeRegister {
      * If two or more op modes are registered with the same name, the app will display an error.
      */
 
-    manager.register("MxHardware", MxHardware.class);
+    manager.register("MxAuto", MxAuto.class);
+    manager.register("MxTeleOp", MxTeleOp.class);
+    manager.register("MatrixTeleOp", MatrixTeleOp.class);
+    manager.register("MxHiTechnicMCOpMode", MxHiTechnicMCOpMode.class);
 
     //manager.register("NullOp", NullOp.class);
 
