@@ -66,10 +66,10 @@ public class MatrixTeleOp extends OpMode {
     // amount to change the claw servo position by
     double clawDelta = 0.1;
 
-    DcMotor motorRightFront;
-    DcMotor motorRightBack;
-    DcMotor motorLeftFront;
-    DcMotor motorLeftBack;
+    DcMotor driveFrontRight;
+    DcMotor driveFrontLeft;
+    DcMotor driveRearRight;
+    DcMotor driveRearLeft;
     //Servo claw;
     //Servo arm;
 
@@ -105,12 +105,12 @@ public class MatrixTeleOp extends OpMode {
 		 *    "servo_1" controls the arm joint of the manipulator.
 		 *    "servo_6" controls the claw joint of the manipulator.
 		 */
-        motorRightFront = hardwareMap.dcMotor.get("mrf");
-        motorRightBack = hardwareMap.dcMotor.get("mrb");
-        motorLeftFront = hardwareMap.dcMotor.get("mlf");
-        motorLeftBack = hardwareMap.dcMotor.get("mlb");
-        //motorRightFront.setDirection(DcMotor.Direction.REVERSE);
-        //motorRightBack.setDirection(DcMotor.Direction.REVERSE);
+        driveFrontRight = hardwareMap.dcMotor.get("dfr");
+        driveRearRight = hardwareMap.dcMotor.get("drr");
+        driveFrontLeft = hardwareMap.dcMotor.get("dfl");
+        driveRearLeft = hardwareMap.dcMotor.get("drl");
+        driveFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        driveRearRight.setDirection(DcMotor.Direction.REVERSE);
 
         //arm = hardwareMap.servo.get("servo_1");
         //claw = hardwareMap.servo.get("servo_6");
@@ -155,10 +155,10 @@ public class MatrixTeleOp extends OpMode {
 
 
         // write the values to the motors
-        motorRightFront.setPower(right);
-        motorRightBack.setPower(right);
-        motorLeftFront.setPower(left);
-        motorLeftBack.setPower(left);
+        driveFrontRight.setPower(right);
+        driveRearRight.setPower(right);
+        driveFrontLeft.setPower(left);
+        driveRearLeft.setPower(left);
 
         // update the position of the arm.
         if (gamepad1.a) {

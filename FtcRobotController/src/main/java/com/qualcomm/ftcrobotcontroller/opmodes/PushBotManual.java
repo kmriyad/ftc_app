@@ -77,7 +77,7 @@ public class PushBotManual extends PushBotTelemetry
         float l_left_drive_power = scale_motor_power (-gamepad1.left_stick_y);
         float l_right_drive_power = scale_motor_power (-gamepad1.right_stick_y);
 
-        set_drive_power (l_left_drive_power, l_right_drive_power);
+        setDrivePower (l_left_drive_power, l_right_drive_power);
 
         //
         // Manage the arm motor.

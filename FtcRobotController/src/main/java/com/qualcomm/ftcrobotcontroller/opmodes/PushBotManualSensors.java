@@ -84,7 +84,7 @@ public class PushBotManualSensors extends PushBotTelemetrySensors
         float l_right_drive_power
             = (float)scale_motor_power (l_gp1_right_stick_y);
 
-        set_drive_power (l_left_drive_power, l_right_drive_power);
+        setDrivePower (l_left_drive_power, l_right_drive_power);
 
         //
         // Does the user want the arm to rise until the touch sensor is

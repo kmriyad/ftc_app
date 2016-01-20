@@ -82,7 +82,7 @@ public class PushBotManual1 extends PushBotTelemetry
         float l_right_drive_power
             = (float)scale_motor_power (l_gp1_right_stick_y);
 
-        set_drive_power (l_left_drive_power, l_right_drive_power);
+        setDrivePower (l_left_drive_power, l_right_drive_power);
 
         //
         // Manage the arm motor.  The right trigger makes the arm move from the

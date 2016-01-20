@@ -56,14 +56,14 @@ public class PushBotOdsFollowEvent extends PushBotTelemetrySensors
         //
         if (a_ods_white_tape_detected ())
         {
-            set_drive_power (0.0, 0.2);
+            setDrivePower (0.0, 0.2);
         }
         //
         // Else a white line has not been detected, so turn right.
         //
         else
         {
-            set_drive_power (0.2, 0.0);
+            setDrivePower (0.2, 0.0);
         }
 
         //

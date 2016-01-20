@@ -60,7 +60,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
         //
         // Reset the motor encoders on the drive wheels.
         //
-        reset_drive_encoders ();
+        resetDriveEncoders ();
 
     } // start
 
@@ -213,7 +213,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
             //
             if (a_ods_white_tape_detected ())
             {
-                set_drive_power (0.0, 0.0);
+                setDrivePower (0.0, 0.0);
 
                 //
                 // Begin the next state.
@@ -231,7 +231,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
             //
             else
             {
-                set_drive_power (1.0, 1.0);
+                setDrivePower (1.0, 1.0);
             }
             break;
         //

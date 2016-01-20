@@ -1,16 +1,18 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.ftccommon.DbgLog;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
 
 //------------------------------------------------------------------------------
 //
 // PushBotHardwareSensors
 //
+
 /**
  * Provides a single sensor access point between custom op-modes and the
  * OpMode class for the Push Bot.  It does this by extending the original Push
@@ -23,19 +25,18 @@ import com.qualcomm.robotcore.util.Range;
  * @author SSI Robotics
  * @version 2015-08-13-20-04
  */
-public class PushBotHardwareSensors extends PushBotTelemetry
+public class MxSensors extends MxTelemetry {
 
-{
-    //--------------------------------------------------------------------------
-    //
-    // PushBotHardwareSensors
-    //
-    /**
-     * Construct the class.
-     *
-     * The system calls this member when the class is instantiated.
-     */
-    public PushBotHardwareSensors()
+    private TouchSensor v_sensor_touch;
+    private IrSeekerSensor v_sensor_ir;
+    private OpticalDistanceSensor sODS;
+    private GyroSensor sGyro;
+    private ColorSensor sLine;
+    int gyroX, gyroY, gyroZ = 0;
+    int heading = 0;
+
+
+    public MxSensors()
 
     {
         //
@@ -59,18 +60,12 @@ public class PushBotHardwareSensors extends PushBotTelemetry
      *
      * The system calls this member once when the OpMode is enabled.
      */
-    @Override public void init ()
+    @Override
+    public void init ()
 
     {
-        //
-        // Use a base class method to associate class members to non-sensor
-        // hardware ports (i.e. left/right drive wheels, left arm, etc.).
-        //
         super.init ();
 
-        //
-        // Connect the sensors.
-        //
         try
         {
             v_sensor_touch = hardwareMap.touchSensor.get ("sensor_touch");
@@ -97,13 +92,13 @@ public class PushBotHardwareSensors extends PushBotTelemetry
 
         try
         {
-            v_sensor_ods = hardwareMap.opticalDistanceSensor.get ("sensor_ods");
+            sODS = hardwareMap.opticalDistanceSensor.get ("sODS");
         }
         catch (Exception p_exeception)
         {
             try
             {
-                v_sensor_ods = hardwareMap.opticalDistanceSensor.get
+                sODS = hardwareMap.opticalDistanceSensor.get
                     ( "sensor_eopd"
                     );
             }
@@ -111,7 +106,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
             {
                 try
                 {
-                    v_sensor_ods = hardwareMap.opticalDistanceSensor.get
+                    sODS = hardwareMap.opticalDistanceSensor.get
                         ( "sensor_EOPD"
                         );
                 }
@@ -125,22 +120,87 @@ public class PushBotHardwareSensors extends PushBotTelemetry
                         + ").\n"
                         );
 
-                    v_sensor_ods = null;
+                    sODS = null;
                 }
             }
         }
 
         //Gyro Sensor
         try{
+
             sGyro = hardwareMap.gyroSensor.get("sGyro");
+
         }catch(Exception ex){
+
             m_warning_message ("sGyro");
             DbgLog.msg (ex.getLocalizedMessage ());
-
             sGyro = null;
         }
 
+        //Color Sensors
+        try{
+            sLine = hardwareMap.colorSensor.get("sLine");
+            sLine.enableLed(true);
+        }catch(Exception ex){
+
+            m_warning_message ("sLine");
+            DbgLog.msg (ex.getLocalizedMessage ());
+            sLine = null;
+        }
+
     } // init
+
+    @Override
+    public void start(){
+        sLine.enableLed(true);
+    }
+
+    public void stop(){
+        sLine.enableLed(false);
+    }
+
+    //Gyro
+
+    void calibrateGyro() throws InterruptedException{
+
+        sGyro.calibrate();
+        while (sGyro.isCalibrating()){
+            Thread.sleep(50);
+        }
+        sGyro.resetZAxisIntegrator();
+    }
+
+    int getGyroHeading(){
+
+        heading = sGyro.getHeading();
+        return heading;
+    }
+
+    boolean haveGyroHeadingReached(int heading){
+
+        boolean reached = false;
+        if(sGyro != null){
+            if(getGyroHeading() <= heading){
+                reached = true;
+            }
+        }
+
+        return reached;
+    }
+
+    //ODS
+
+    boolean isWhiteTapeDetected(){
+
+        boolean detection = false;
+
+        if(sODS != null){
+            if(sODS.getLightDetected() > 0.8){
+                detection = true;
+            }
+        }
+        return detection;
+    }
 
     //--------------------------------------------------------------------------
     //
@@ -336,77 +396,18 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     {
         double l_return = 0.0;
 
-        if (v_sensor_ods != null)
+        if (sODS != null)
         {
-            v_sensor_ods.getLightDetected ();
+            sODS.getLightDetected ();
         }
 
         return l_return;
 
     } // a_ods_light_detected
 
-    //--------------------------------------------------------------------------
-    //
-    // a_ods_white_tape_detected
-    //
-    /**
-     * Access whether the EOP is detecting white tape.
-     */
-    boolean a_ods_white_tape_detected ()
 
-    {
-        //
-        // Assume not.
-        //
-        boolean l_return = false;
 
-        if (v_sensor_ods != null)
-        {
-            //
-            // Is the amount of light detected above the threshold for white
-            // tape?
-            //
-            if (v_sensor_ods.getLightDetected () > 0.8)
-            {
-                l_return = true;
-            }
-        }
 
-        //
-        // Return
-        //
-        return l_return;
 
-    } // a_ods_white_tape_detected
 
-    //--------------------------------------------------------------------------
-    //
-    // v_sensor_touch
-    //
-    /**
-     * Manage the touch sensor.
-     */
-    private TouchSensor v_sensor_touch;
-
-    //--------------------------------------------------------------------------
-    //
-    // v_sensor_ir
-    //
-    /**
-     * Manage the infra-red sensor.
-     */
-    private IrSeekerSensor v_sensor_ir;
-
-    //--------------------------------------------------------------------------
-    //
-    // v_sensor_ods
-    //
-    /**
-     * Manage the optical distance sensor.
-     */
-    private OpticalDistanceSensor v_sensor_ods;
-
-    //Written by Riyad
-    private GyroSensor sGyro;
-
-} // PushBotHardwareSensors
+} // MxSensors

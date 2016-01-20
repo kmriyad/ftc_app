@@ -57,7 +57,7 @@ public class ColorSensorDriver extends LinearOpMode {
   public void runOpMode() throws InterruptedException {
     hardwareMap.logDevices();
 
-    cdim = hardwareMap.deviceInterfaceModule.get("dim");
+    //cdim = hardwareMap.deviceInterfaceModule.get("cdi");
     switch (device) {
       case HITECHNIC_NXT:
         colorSensor = hardwareMap.colorSensor.get("nxt");
@@ -66,11 +66,11 @@ public class ColorSensorDriver extends LinearOpMode {
         colorSensor = hardwareMap.colorSensor.get("lady");
         break;
       case MODERN_ROBOTICS_I2C:
-        colorSensor = hardwareMap.colorSensor.get("mr");
+        colorSensor = hardwareMap.colorSensor.get("sLine");
         break;
     }
-    led = hardwareMap.led.get("led");
-    t = hardwareMap.touchSensor.get("t");
+    //led = hardwareMap.led.get("led");
+    //t = hardwareMap.touchSensor.get("t");
 
     waitForStart();
 
@@ -79,8 +79,8 @@ public class ColorSensorDriver extends LinearOpMode {
     final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(R.id.RelativeLayout);
     while (opModeIsActive()) {
 
-      enableLed(t.isPressed());
-
+      //enableLed(t.isPressed());
+      colorSensor.enableLed(true);
       switch (device) {
         case HITECHNIC_NXT:
           Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsvValues);
@@ -89,6 +89,7 @@ public class ColorSensorDriver extends LinearOpMode {
           Color.RGBToHSV((colorSensor.red() * 255) / 800, (colorSensor.green() * 255) / 800, (colorSensor.blue() * 255) / 800, hsvValues);
           break;
         case MODERN_ROBOTICS_I2C:
+          colorSensor.enableLed(true);
           Color.RGBToHSV(colorSensor.red()*8, colorSensor.green()*8, colorSensor.blue()*8, hsvValues);
           break;
       }

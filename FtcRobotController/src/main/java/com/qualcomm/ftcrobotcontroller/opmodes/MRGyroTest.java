@@ -40,6 +40,7 @@ import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
 /*
  *
@@ -59,6 +60,7 @@ public class MRGyroTest extends LinearOpMode {
   public void runOpMode() throws InterruptedException {
 
     GyroSensor sensorGyro;
+    OpticalDistanceSensor sOds;
     int xVal, yVal, zVal = 0;
     int heading = 0;
 
@@ -67,7 +69,11 @@ public class MRGyroTest extends LinearOpMode {
     hardwareMap.logDevices();
 
     // get a reference to our GyroSensor object.
-    sensorGyro = hardwareMap.gyroSensor.get("gyro");
+    sensorGyro = hardwareMap.gyroSensor.get("sGyro");
+    sOds = hardwareMap.opticalDistanceSensor.get("sOds");
+
+    //ODS
+    sOds.enableLed(true);
 
     // calibrate the gyro.
     sensorGyro.calibrate();

@@ -56,9 +56,14 @@ public class FtcOpModeRegister implements OpModeRegister {
      */
 
     manager.register("MxAuto", MxAuto.class);
+    manager.register("MxRedFourNoWait", MxRedFourNoWait.class);
+    manager.register("MxBlueFourNoWait", MxBlueFourNoWait.class);
+    manager.register("MxBlueFourAngleNoWait", MxBlueFourAngleNoWait.class);
+    manager.register("MxRedFourAngleNoWait", MxRedFourAngleNoWait.class);
     manager.register("MxTeleOp", MxTeleOp.class);
     manager.register("MatrixTeleOp", MatrixTeleOp.class);
-    manager.register("MxHiTechnicMCOpMode", MxHiTechnicMCOpMode.class);
+    manager.register("MxTestSensor", MxTestSensor.class);
+    manager.register("MxTestOds", MxTestOds.class);
 
     //manager.register("NullOp", NullOp.class);
 

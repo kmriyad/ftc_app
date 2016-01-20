@@ -62,7 +62,7 @@ public class PushBotTouchEvent extends PushBotTelemetrySensors
         //
         if (is_touch_sensor_pressed ())
         {
-            set_drive_power (0.0, 0.0);
+            setDrivePower (0.0, 0.0);
         }
         //
         // Else a white line has not been detected, so set the power level to
@@ -70,7 +70,7 @@ public class PushBotTouchEvent extends PushBotTelemetrySensors
         //
         else
         {
-            set_drive_power (1.0, 1.0);
+            setDrivePower (1.0, 1.0);
         }
 
         //

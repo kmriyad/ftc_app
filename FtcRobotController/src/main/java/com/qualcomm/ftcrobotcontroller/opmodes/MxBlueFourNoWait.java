@@ -5,26 +5,14 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 // PushBotAuto
 //
 /**
- * Provide a basic autonomous operational mode that uses the left and right
- * drive motors and associated encoders implemented using a state machine for
- * the Push Bot.
- *
- * @author SSI Robotics
- * @version 2015-08-01-06-01
+ * The three indicates the third tile
  */
-public class PushBotAuto extends PushBotTelemetry
+public class MxBlueFourNoWait extends MxSensorsTelemetry
 
 {
-    //--------------------------------------------------------------------------
-    //
-    // PushBotAuto
-    //
-    /**
-     * Construct the class.
-     *
-     * The system calls this member when the class is instantiated.
-     */
-    public PushBotAuto ()
+    private int v_state = 0;
+
+    public MxBlueFourNoWait()
 
     {
         //
@@ -59,7 +47,7 @@ public class PushBotAuto extends PushBotTelemetry
         //
         // Reset the motor encoders on the drive wheels.
         //
-        resetDriveEncoders ();
+        resetDriveEncoders();
 
     } // start
 
@@ -90,7 +78,7 @@ public class PushBotAuto extends PushBotTelemetry
             //
             // Reset the encoders to ensure they are at a known good value.
             //
-            resetDriveEncoders ();
+            resetDriveEncoders();
 
             //
             // Transition to the next state when this method is called again.
@@ -107,12 +95,12 @@ public class PushBotAuto extends PushBotTelemetry
             // be in this state and NOT the previous or the encoders will not
             // work.  It doesn't need to be in subsequent states.
             //
-            driveUsingEncoders ();
+            driveUsingEncoders();
 
             //
             // Start the drive wheel motors at full power.
             //
-            setDrivePower (1.0f, 1.0f);
+            setDrivePower(1.0f, 1.0f);
 
             //
             // Have the motor shafts turned the required amount?
@@ -120,17 +108,17 @@ public class PushBotAuto extends PushBotTelemetry
             // If they haven't, then the op-mode remains in this state (i.e this
             // block will be executed the next time this method is called).
             //
-            if (haveDriveEncodersReached (1000, 1000))
+            if (haveDriveEncodersReached(4500, 4500))
             {
                 //
                 // Reset the encoders to ensure they are at a known good value.
                 //
-                resetDriveEncoders ();
+                resetDriveEncoders();
 
                 //
                 // Stop the motors.
                 //
-                setDrivePower (0.0f, 0.0f);
+                setDrivePower(0.0f, 0.0f);
 
                 //
                 // Transition to the next state when this method is called
@@ -153,12 +141,12 @@ public class PushBotAuto extends PushBotTelemetry
         // Turn left until the encoders exceed the specified values.
         //
         case 3:
-            driveUsingEncoders ();
-            setDrivePower (1.0f, -1.0f);
-            if (haveDriveEncodersReached (10, 10))
+            driveUsingEncoders();
+            setDrivePower(1.0f, -1.0f);
+            if (haveDriveEncodersReached(1500, 1500))
             {
-                resetDriveEncoders ();
-                setDrivePower (0.0f, 0.0f);
+                resetDriveEncoders();
+                setDrivePower(0.0f, 0.0f);
                 v_state++;
             }
             break;
@@ -175,12 +163,12 @@ public class PushBotAuto extends PushBotTelemetry
         // Turn right until the encoders exceed the specified values.
         //
         case 5:
-            driveUsingEncoders ();
-            setDrivePower (1.0f, 1.0f);
-            if (haveDriveEncodersReached (10, 10))
+            driveUsingEncoders();
+            setDrivePower(1.0f, 1.0f);
+            if (haveDriveEncodersReached(9000, 9000))
             {
-                resetDriveEncoders ();
-                setDrivePower (0.0f, 0.0f);
+                resetDriveEncoders();
+                setDrivePower(0.0f, 0.0f);
                 v_state++;
             }
             break;
@@ -188,6 +176,44 @@ public class PushBotAuto extends PushBotTelemetry
         // Wait...
         //
         case 6:
+            if (have_drive_encoders_reset ())
+            {
+                v_state++;
+            }
+            break;
+
+        //
+        // Turn right until the encoders exceed the specified values.
+        //
+        case 7:
+            driveUsingEncoders();
+            setDrivePower(1.0f, -1.0f);
+            if (haveDriveEncodersReached(1600, 1600))
+            {
+                resetDriveEncoders();
+                setDrivePower(0.0f, 0.0f);
+                v_state++;
+            }
+            break;
+
+        case 8:
+            if (have_drive_encoders_reset ())
+            {
+                v_state++;
+            }
+            break;
+        case 9:
+            driveUsingEncoders();
+            setDrivePower(1.0f, 1.0f);
+            if (haveDriveEncodersReached(4000, 4000))
+            {
+                resetDriveEncoders();
+                setDrivePower(0.0f, 0.0f);
+                v_state++;
+            }
+            break;
+
+        case 10:
             if (have_drive_encoders_reset ())
             {
                 v_state++;
@@ -214,17 +240,6 @@ public class PushBotAuto extends PushBotTelemetry
 
     } // loop
 
-    //--------------------------------------------------------------------------
-    //
-    // v_state
-    //
-    /**
-     * This class member remembers which state is currently active.  When the
-     * start method is called, the state will be initialized (0).  When the loop
-     * starts, the state will change from initialize to state_1.  When state_1
-     * actions are complete, the state will change to state_2.  This implements
-     * a state machine for the loop method.
-     */
-    private int v_state = 0;
 
-} // PushBotAuto
+
+} // MxAuto
